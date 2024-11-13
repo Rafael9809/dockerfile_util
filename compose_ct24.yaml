@@ -1,0 +1,35 @@
+services:
+  kafka:
+    image: apache/kafka:latest
+    container_name: kafka
+    ports:
+      - 9092:9092
+  eureka:
+    image: eureka-image
+    container_name: eureka
+    ports:
+      - 8761:8761
+  config-server:
+    image: config-server-image
+    container_name: config-server
+  gateway:
+    image: gateway-image
+    container_name: gateway
+    ports:
+      - 8090:8090
+    depends_on:
+      - eureka
+  conector-t24:
+    image: ct24-image
+    container_name: ct24
+    depends_on:
+      - eureka
+      - kafka
+      - config-server
+  conector-mongo:
+    image: c-mongo-image  
+    container_name: conector-mongo
+    depends_on:
+      - eureka
+      - kafka
+      - config-server
